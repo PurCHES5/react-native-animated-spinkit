@@ -4,18 +4,24 @@ import { SpinnerProps, defaultProps } from './SpinnerProps'
 import AnimationContainer from './AnimationContainer'
 import { loop } from './utils'
 
-export default class Plane extends React.Component<SpinnerProps> {
+export default class Plane extends React.Component<SpinnerProps & { width?: number; height?: number }> {
   static defaultProps = defaultProps
 
   render() {
     const {
       size,
+      width,
+      height,
       color,
       style,
       animating,
       hidesWhenStopped,
       ...rest
     } = this.props
+
+    // Use width and height props or fallback to size
+    const rectWidth = width || size
+    const rectHeight = height || size
 
     return (
       <AnimationContainer
@@ -35,9 +41,11 @@ export default class Plane extends React.Component<SpinnerProps> {
           <Animated.View
             style={[
               {
-                width: size,
-                height: size,
-                backgroundColor: color,
+                width: rectWidth, // Rectangle width
+                height: rectHeight, // Rectangle height
+                borderWidth: size * 0.1, // Thickness of the border (adjust as needed)
+                borderColor: color, // Border color
+                backgroundColor: 'transparent', // Hollow center
                 opacity: !animating && hidesWhenStopped ? 0 : 1,
                 transform: [
                   {
